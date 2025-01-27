@@ -1,0 +1,76 @@
+<?php include 'header.php'; ?>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="css/styles.css">
+    <title>Machinery Management</title>
+</head>
+<body>
+    <main>
+        <h1>Machinery Management</h1>
+        <form action="machinery_management_updated.php" method="POST">
+            <label for="name">Name:</label>
+            <input type="text" id="name" name="name" required><br>
+
+            <label for="mimage">Image:</label>
+            <input type="text" id="mimage" name="mimage" required><br>
+
+            <label for="description">Description:</label>
+            <textarea id="description" name="description" required></textarea><br>
+
+            <label for="rental_price">Rental Price:</label>
+            <input type="number" id="rental_price" name="rental_price" step="0.01" required><br>
+
+            <label for="availability">Availability:</label>
+            <select id="availability" name="availability">
+                <option value="1">Available</option>
+                <option value="0">Not Available</option>
+            </select><br>
+
+            <input type="submit" value="Add Machinery">
+        </form>
+
+        <h2>Existing Machinery</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th>Image</th>
+                    <th>Description</th>
+                    <th>Rental Price</th>
+                    <th>Availability</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php
+                include 'db.php';
+                $machinery = getMachinery();
+                foreach ($machinery as $item) {
+                    echo "<tr>
+                            <td>{$item['id']}</td>
+                            <td>{$item['name']}</td>
+                            <td><img src='{$item['mimage']}' alt='{$item['name']}' width='50'></td>
+                            <td>{$item['description']}</td>
+                            <td>{$item['rental_price']}</td>
+                            <td>" . ($item['availability'] ? 'Available' : 'Not Available') . "</td>
+                            <td>
+                                <form action='add_to_cart.php' method='POST'>
+                                    <input type='hidden' name='machinery_id' value='{$item['id']}'>
+                                    <input type='submit' value='Add to Cart'>
+                                </form>
+                            </td>
+                          </tr>";
+                }
+                ?>
+            </tbody>
+        </table>
+    </main>
+    <footer>
+        <p>&copy; 2023 Shetkari Raja</p>
+    </footer>
+</body>
+</html>
